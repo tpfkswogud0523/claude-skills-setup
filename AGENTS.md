@@ -159,3 +159,24 @@ When unsure:
 - Create branches instead of direct commits.
 - Comment instead of changing state.
 - Ask before destructive or externally visible changes.
+
+## New Project Intake Question
+
+When starting a new project, opening a new repository for the first time, or substantially changing an existing automation project, the assistant must ask this before implementation work:
+
+> Should I set up Sentry error logging and GitHub work-record rules for this project now?
+
+If the user says yes, the assistant should:
+
+1. Check whether the repository already has Sentry SDK, SENTRY_DSN, AGENTS.md, CLAUDE.md, and ai-collaboration docs.
+2. If Sentry is missing, offer to create or guide creation of a Sentry project and DSN.
+3. Add Sentry error capture to the project code once the DSN is available.
+4. Add .env.example entries without committing real secrets.
+5. Add or update GitHub work-log and handoff rules.
+6. Record the setup in GitHub so another computer or assistant can continue later.
+
+If the user says no or later, continue the requested work but mention that runtime errors will not be automatically captured by Sentry until this setup is done.
+
+Use this short Korean prompt when helpful:
+
+> 새 프로젝트라서 먼저 확인할게요. 이 프로젝트도 오류가 나면 Sentry에 자동 기록되게 하고, 작업 내역은 GitHub에 이어받기 좋게 남기도록 세팅할까요?
