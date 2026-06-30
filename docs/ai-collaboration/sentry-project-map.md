@@ -12,3 +12,4 @@ These Sentry projects are intended to match GitHub repositories. DSN values are 
 | tpfkswogud0523/edupine-automation | edupine-automation | 4511654049939457 | created_and_wired |
 | tpfkswogud0523/riroschool-bot | riroschool-bot | 4511654050004992 | created_and_wired |
 | tpfkswogud0523/claude-skills-setup | claude-skills-setup | 4511654050070528 | created_and_wired |
+| tpfkswogud0523/autism-early-check | autism-early-check | 4511654414123008 | created_and_wired |
