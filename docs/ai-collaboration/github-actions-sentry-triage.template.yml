@@ -1,0 +1,72 @@
+name: Sentry GitHub Triage
+
+on:
+  workflow_dispatch:
+    inputs:
+      create_github_issues:
+        description: Create GitHub issues for new Sentry candidates. Requires repo env opt-in too.
+        required: false
+        default: "false"
+      limit:
+        description: Number of Sentry issues to inspect.
+        required: false
+        default: "10"
+      threshold:
+        description: Minimum event count before reporting.
+        required: false
+        default: "5"
+  schedule:
+    - cron: "0 0 * * *"
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run Sentry triage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_DEFAULT_OWNER: ${{ github.repository_owner }}
+          GITHUB_DEFAULT_REPO: ${{ github.event.repository.name }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_ENVIRONMENT: ${{ vars.SENTRY_ENVIRONMENT || "production" }}
+          SENTRY_AUTO_CREATE_GITHUB_ISSUES: ${{ vars.SENTRY_AUTO_CREATE_GITHUB_ISSUES || "false" }}
+          SENTRY_EVENT_THRESHOLD: ${{ github.event.inputs.threshold || vars.SENTRY_EVENT_THRESHOLD || "5" }}
+          AI_TRIAGE_REPORT_PATH: reports/sentry-triage.md
+          AI_TRIAGE_REPORT_ISSUE: ${{ vars.AI_TRIAGE_REPORT_ISSUE }}
+        run: |
+          CREATE_FLAG="false"
+          if [ "${{ github.event.inputs.create_github_issues }}" = "true" ]; then CREATE_FLAG="true"; fi
+          node scripts/sentry-github-triage.mjs --limit "${{ github.event.inputs.limit || 10 }}" --threshold "$SENTRY_EVENT_THRESHOLD" --create-github-issues "$CREATE_FLAG" --report reports/sentry-triage.md
+
+      - name: Upload triage report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sentry-triage-report
+          path: reports/sentry-triage.md
+
+      - name: Commit triage report when changed
+        if: github.event_name == "workflow_dispatch"
+        run: |
+          if git diff --quiet -- reports/sentry-triage.md; then
+            echo "No report changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/sentry-triage.md
+          git commit -m "chore: update Sentry triage report"
+          git push

@@ -1,0 +1,19 @@
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Local AI/tool state
+.codex-local/
+.claude-local/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Logs and temporary output
+*.log
+tmp/
+temp/

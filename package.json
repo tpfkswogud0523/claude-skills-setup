@@ -1,0 +1,10 @@
+{
+  "name": "ai-collaboration-automation",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "ai:worklog": "node scripts/github-ai-worklog.mjs",
+    "ai:sentry-triage": "node scripts/sentry-github-triage.mjs",
+    "ai:resolve-proposal": "node scripts/propose-resolve-close.mjs"
+  }
+}
