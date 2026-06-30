@@ -235,3 +235,17 @@ This setup greatly reduces conflicts by making both tools:
 - Leave handoff notes.
 
 For high-risk work, keep one active owner per issue or branch.
+
+## New Project Intake
+
+For every new project or first-time repository setup, the assistant should ask whether to enable:
+
+- Sentry runtime error logging.
+- GitHub work-log and handoff rules.
+- Shared AI collaboration docs.
+
+Recommended prompt:
+
+새 프로젝트라서 먼저 확인할게요. 이 프로젝트도 오류가 나면 Sentry에 자동 기록되게 하고, 작업 내역은 GitHub에 이어받기 좋게 남기도록 세팅할까요?
+
+This prevents the common mistake where a user asks to remember errors in Sentry, but the project has no Sentry project, DSN, or SDK installed yet.
