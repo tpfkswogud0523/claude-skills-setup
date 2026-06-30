@@ -10,6 +10,7 @@ Use this folder for human-readable workflow guidance and automation templates.
 - automation-toolkit.md: how to use the local scripts.
 - automation-stages.md: staged rollout for Sentry-to-GitHub automation.
 - github-actions-sentry-triage.template.yml: optional GitHub Actions automation template.
+- sentry-codex-token-setup.md: how to add a separate Codex Sentry token while keeping Claude Code unchanged.
 
 ## Note About GitHub Actions Workflows
 
